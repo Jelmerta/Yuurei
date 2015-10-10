@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".GameScreen">
+    <item
+        android:id="@+id/action_restart_game"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="Restart game"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/action_change_language"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="Dutch"
+        android:visible="true"/>
+
+
+</menu>

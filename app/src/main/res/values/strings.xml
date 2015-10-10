@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Yuurei</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="game_title_text">幽霊</string>
     <string name="action_settings">Settings</string>
 </resources>

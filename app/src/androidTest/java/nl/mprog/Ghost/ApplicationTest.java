@@ -1,4 +1,4 @@
-package com.example.jelmer.yuurei;
+package nl.mprog.Ghost;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
