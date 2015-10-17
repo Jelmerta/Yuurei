@@ -11,16 +11,11 @@ import android.view.MenuItem;
 
 import nl.mprog.Ghost.R;
 
-/**
- * Created by Gebruiker on 10/3/2015.
- */
 public class SettingScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_screen);
-
-        //Lexicon dutchLexicon = new Lexicon("res/raw/dutch.txt");
     }
 }

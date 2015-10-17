@@ -7,14 +7,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context="..TitleScreen">
 
-    <Button
-        android:id="@+id/setting_button"
-        android:text="Settings"
+    <ImageButton
+        android:id="@+id/title_setting_button"
+        android:contentDescription="Settings"
+        android:background="@drawable/settings"
         android:layout_width="100dp"
         android:layout_height="100dp" />
 
     <ImageButton
         android:id="@+id/language_menu"
+        android:contentDescription="Language"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
@@ -28,7 +30,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/setting_button">
+        android:layout_below="@id/title_setting_button">
 
         <TextView
             android:id="@+id/vs_text"
@@ -51,9 +53,11 @@
 
         <TextView
             android:id="@+id/player1_name"
+            android:contentDescription="Player 1's icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name"
+            android:hint="Name"
+            android:text="Karel"
             android:textSize="20sp"
             android:layout_toRightOf="@id/title_icon_player1"
             android:layout_toEndOf="@+id/title_icon_player1"
@@ -65,7 +69,9 @@
 
         <ImageButton
             android:id="@+id/title_icon_player2"
+            android:contentDescription="Player 2's icon"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -78,10 +84,13 @@
             android:id="@+id/player2_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter name"
+            android:hint="Name"
+            android:text="Piet"
             android:textSize="20sp"
             android:layout_toLeftOf="@id/title_icon_player2"
             android:layout_toStartOf="@id/title_icon_player2"
+            android:layout_toRightOf="@id/vs_text"
+            android:layout_toEndOf="@id/vs_text"
             android:layout_alignTop="@id/vs_text"
             android:layout_alignBottom="@id/vs_text"
             android:gravity="center"
@@ -136,22 +145,24 @@
         android:id="@+id/start_game_button"
         android:layout_below="@+id/game_title_text_english"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="10dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/explanation_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Explanation"
+        android:contentDescription="Explanation about the game"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/information"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true" />
 
-    <Button
-        android:id="@+id/highscore_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Highscores"
+    <ImageButton
+        android:id="@+id/title_highscore_button"
+        android:contentDescription="Highscores"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/highscores"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>

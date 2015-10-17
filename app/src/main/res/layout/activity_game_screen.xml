@@ -11,25 +11,25 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="..GameScreen">
 
-    <Button
-        android:id="@+id/setting_button"
-        android:text="Settings"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+    <ImageButton
+        android:id="@+id/game_setting_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/settings" />
 
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Home"
-        android:id="@+id/home_button"
+    <ImageButton
+        android:id="@+id/game_home_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/home"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/restart_button"
-        android:text="Restart"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <ImageButton
+        android:id="@+id/game_restart_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/restart"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -38,7 +38,7 @@
         android:id="@+id/game_icon_player1"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/setting_button"
+        android:layout_below="@+id/game_setting_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="71dp" />
@@ -51,7 +51,8 @@
         android:textSize="30sp"
         android:layout_alignTop="@+id/game_icon_player1"
         android:layout_alignBottom="@+id/game_icon_player1"
-        android:layout_toRightOf="@+id/game_icon_player1" />
+        android:layout_toRightOf="@+id/game_icon_player1"
+        android:layout_toEndOf="@id/game_icon_player1" />
 
     <TextView
         android:id="@+id/game_player2_name"
@@ -61,7 +62,8 @@
         android:textSize="30sp"
         android:layout_alignTop="@+id/game_icon_player2"
         android:layout_alignBottom="@+id/game_icon_player2"
-        android:layout_toLeftOf="@+id/game_icon_player2" />
+        android:layout_toLeftOf="@+id/game_icon_player2"
+        android:layout_toStartOf="@id/game_icon_player2"/>
 
     <ImageButton
         android:id="@+id/game_icon_player2"
@@ -73,36 +75,257 @@
 
     <TextView
         android:id="@+id/guessed_prefix_text"
-        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="25sp"
+        android:text="______"
+        android:textSize="48sp"
         android:layout_below="@+id/game_icon_player1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="111dp"
+        android:layout_marginTop="20dp"
          />
 
-    <ImageButton
-        android:id="@+id/game_enter_button"
-        android:layout_marginTop="-40dp"
+    <LinearLayout
+        android:id="@+id/keyboard"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/enter_buttonbk"
-        android:layout_alignTop="@+id/guessed_letter_input"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentBottom="true">
 
-    <EditText
-        android:id="@+id/guessed_letter_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/guessed_prefix_text"
-        android:layout_alignBottom="@+id/guessed_prefix_text"
-        android:layout_toLeftOf="@id/game_enter_button"
-        android:layout_toStartOf="@id/game_enter_button"/>
+        <LinearLayout
+            android:id="@+id/keyboard_row1"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-    <!-- keyboard goes here -->
+            <Button
+                android:id="@+id/keyboard_q"
+                android:text="q"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_w"
+                android:text="w"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.08"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_e"
+                android:text="e"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_r"
+                android:text="r"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_t"
+                android:text="t"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_y"
+                android:text="y"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_u"
+                android:text="u"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_i"
+                android:text="i"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_o"
+                android:text="o"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_p"
+                android:text="p"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/keyboard_row2"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/keyboard_a"
+                android:text="a"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_s"
+                android:text="s"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_d"
+                android:text="d"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_f"
+                android:text="f"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_g"
+                android:text="g"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_h"
+                android:text="h"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_j"
+                android:text="j"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_k"
+                android:text="k"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_l"
+                android:text="l"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/keyboard_row3"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/keyboard_z"
+                android:text="z"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_x"
+                android:text="x"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_c"
+                android:text="c"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_v"
+                android:text="v"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_b"
+                android:text="b"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_n"
+                android:text="n"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+            <Button
+                android:id="@+id/keyboard_m"
+                android:text="m"
+                android:textSize="@dimen/keyboard_text_size"
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/keyboard_text_height" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

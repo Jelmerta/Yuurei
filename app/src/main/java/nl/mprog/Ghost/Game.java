@@ -5,11 +5,8 @@
 
 package nl.mprog.Ghost;
 
+import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Gebruiker on 10/3/2015.
- */
 
 public class Game {
     public final static boolean PLAYER1 = false;
@@ -18,31 +15,32 @@ public class Game {
     public final static int DUTCH = 0;
     public final static int ENGLISH = 1;
 
-    private String currentPrefix = ""; // 2 classes have this now
     private Lexicon lexicon;
-    //private Lexicon filteredLexicon;
+    private String currentPrefix = "";
 
-    boolean turn;
+    boolean turn = PLAYER1;
     boolean ended;
 
-    public Game(Lexicon lexicon) {
-        setTurn(PLAYER1);
-        this.lexicon = lexicon;
-    } ///????? lexicon???
+    List<Player> playerList;
+    int playerId1;
+    int playerId2;
 
-    public void guess(char letter) {
-        currentPrefix += letter;
-        //filteredLexicon = new Lexicon(lexicon.filter(currentPrefix)); // sounds pretty unoptimized (only do first time?)
-        List words = lexicon.filter(currentPrefix);
-        if(words.size() == 0 || (words.size() == 1 && words.get(0).toString().length() == currentPrefix.length())) {
-            ended = true;
+    public Game(Lexicon lexicon, int playerId1, int playerId2) {
+        this.lexicon = lexicon;
+        this.playerId1 = playerId1;
+        this.playerId2 = playerId2;
+    }
+
+    public String getPlayerName(boolean playerSide) {
+        if(playerSide == PLAYER1) {
+            return playerList.get(playerId1).getName();
         } else {
-            toggleTurn();
+            return playerList.get(playerId2).getName();
         }
     }
 
-    public void toggleTurn() {
-        turn = !turn;
+    public String getPrefix() {
+        return currentPrefix;
     }
 
     public void setTurn(boolean turn) {
@@ -61,27 +59,40 @@ public class Game {
         this.ended = ended;
     }
 
+    public List<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
+
+    public void increaseScore(int playerId) {
+        Player player = playerList.get(playerId);
+        player.increaseScore();
+        playerList.set(playerId, player);
+    }
+
+    public void guess(char letter) {
+        currentPrefix += letter;
+
+        lexicon.updateFilter(currentPrefix);
+        int wordsLeft = lexicon.count();
+        if (wordsLeft == 0 || (currentPrefix.length() > 3 && lexicon.contains(currentPrefix))) {
+            ended = true;
+        } else {
+            setTurn(!turn);
+        }
+    }
+
     public boolean winner() {
         return !turn;
     }
 
     public void restart() {
+        lexicon.reset();
         currentPrefix = "";
         setTurn(PLAYER1);
         setEnded(false);
     }
-
-    public void setLexicon(Lexicon lexicon) {
-        this.lexicon = lexicon;
-    }
-
-    public String getPrefix() {
-        return currentPrefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.currentPrefix = prefix;
-    }
-
-    //check if not a word function when clicking X
 }

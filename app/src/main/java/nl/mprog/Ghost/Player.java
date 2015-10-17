@@ -5,10 +5,8 @@
 
 package nl.mprog.Ghost;
 
-/**
- * Created by Gebruiker on 10/9/2015.
- */
 public class Player {
+    private int id;
     private String name;
     private int icon;
     private int score;
@@ -32,7 +30,19 @@ public class Player {
         return icon;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void increaseScore() {
+        score++;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String toString() {
+        return "id = " + id + ", name = " + name + ", icon = " + icon + ", score =" + score;
     }
 }

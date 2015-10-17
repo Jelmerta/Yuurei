@@ -5,12 +5,12 @@
 
 package nl.mprog.Ghost.activities;
 
-//import android.content.Context;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -19,33 +19,36 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import nl.mprog.Ghost.Game;
 import nl.mprog.Ghost.Player;
 import nl.mprog.Ghost.R;
 
 public class TitleScreen extends AppCompatActivity {
-
-    static final String PLAYERLIST= "playerList";
+    List<Player> playerList;
 
     int languageAmount = 2;
     int languageIndex = 0;
 
+    static int playerId1;
+    static int playerId2;
+
     ImageButton languageButton;
     Button gameStartButton;
-    Button explanationButton;
-    Button settingButton;
-    Button highscoreButton;
+    ImageButton explanationButton;
+    ImageButton settingButton;
+    ImageButton highscoreButton;
 
-    ArrayList<String> playerList;
-
-    public static Player player1; //change next week
-    public static Player player2;
     ImageButton playerIconImageButton1;
     ImageButton playerIconImageButton2;
-    public static TextView playerName1;  // change this next week
-    public static TextView playerName2;
+    static TextView playerName1;
+    static TextView playerName2;
     EditText newPlayerName;
     Button addPlayerButton;
 
@@ -54,72 +57,78 @@ public class TitleScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title_screen);
 
-        if (savedInstanceState != null) {
-            playerList = savedInstanceState.getStringArrayList(PLAYERLIST);
-        } else {
+        SharedPreferences myPrefs = this.getSharedPreferences("GamePrefsFile", MODE_PRIVATE);
+        String playerListString = myPrefs.getString("json_player_list", null);
+
+        if(playerListString == null) {
             playerList = new ArrayList<>();
-            playerList.add("Karel");
-            playerList.add("Piet");
+            addDefaultPlayers();
+        } else {
+            Type type = new TypeToken<List<Player>>() {
+            }.getType();
+            playerList = new Gson().fromJson(playerListString, type);
+            if(playerList.size() < 2) {
+                addDefaultPlayers();
+            }
+            playerId1 = myPrefs.getInt("player_id1", 0);
+            playerId2 = myPrefs.getInt("player_id2", 0);
         }
-
-        //final Context context = getApplicationContext();
-
-        //Drawable icon1 = ResourcesCompat.getDrawable(getResources(), R.drawable.icon1, null);
-        //Drawable icon2 = ResourcesCompat.getDrawable(getResources(), R.drawable.icon2, null);
-
-        player1 = new Player("Karel", R.drawable.icon1);
-        player2 = new Player("Piet", R.drawable.icon2);
 
         playerIconImageButton1 = (ImageButton) findViewById(R.id.title_icon_player1);
         playerIconImageButton2 = (ImageButton) findViewById(R.id.title_icon_player2);
 
-        playerIconImageButton1.setBackgroundResource(player1.getIcon());
-        playerIconImageButton2.setBackgroundResource(player2.getIcon());
+        playerIconImageButton1.setBackgroundResource(playerList.get(0).getIcon());
+        playerIconImageButton2.setBackgroundResource(playerList.get(1).getIcon());
 
         playerName1 = (TextView) findViewById(R.id.player1_name);
         playerName2 = (TextView) findViewById(R.id.player2_name);
-
-        playerName1.setText(player1.getName());
-        playerName2.setText(player2.getName());
+        updatePlayerTextFields();
 
         playerName1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent listIntent = new Intent(v.getContext(), PlayerListView.class);
-                listIntent.putStringArrayListExtra("players", playerList);
-                listIntent.putExtra("player number", 1);
-                startActivity(listIntent);
+                startListIntent(v, 1);
             }
         });
 
         playerName2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent listIntent = new Intent(v.getContext(), PlayerListView.class);
-                listIntent.putStringArrayListExtra("players", playerList);
-                listIntent.putExtra("player number", 2);
-                startActivity(listIntent);
+                startListIntent(v, 2);
             }
         });
 
         newPlayerName = (EditText) findViewById(R.id.add_player_input);
-        addPlayerButton = (Button) findViewById(R.id.add_player_button);
 
+        addPlayerButton = (Button) findViewById(R.id.add_player_button);
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean exists = false;
+                boolean added = false;
                 String playerName = newPlayerName.getText().toString();
-                playerList.add(playerName);
-                Player newPlayer = new Player(playerName);
+                for(Player player : playerList) {
+                    if(player.getName().equals(playerName)) {
+                        exists = true;
+                    }
+                }
+                if(!exists) {
+                    Player newPlayer = new Player(playerName);
+                    newPlayer.setId(playerList.size());
+                    playerList.add(newPlayer);
+                    added = true;
+                }
+
                 newPlayerName.setText("");
                 newPlayerName.setHint("New Player");
                 if (v != null) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
-                Toast toast = Toast.makeText(getApplicationContext(), "Name added!", Toast.LENGTH_SHORT);
-                toast.show();
-                //sethint / no text
+                if(added) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Name added!", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
@@ -128,14 +137,15 @@ public class TitleScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent gameIntent = new Intent(v.getContext(), GameScreen.class);
-                gameIntent.putExtra("player_name1", player1.getName());
-                gameIntent.putExtra("player_name2", player2.getName());
-                gameIntent.putExtra("languageIndex", languageIndex);
+                gameIntent.putExtra("player_id1", playerId1);
+                gameIntent.putExtra("player_id2", playerId2);
+                gameIntent.putExtra("language_index", languageIndex);
+                gameIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(gameIntent);
             }
         });
 
-        explanationButton = (Button) findViewById(R.id.explanation_button);
+        explanationButton = (ImageButton) findViewById(R.id.explanation_button);
         explanationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +154,7 @@ public class TitleScreen extends AppCompatActivity {
             }
         });
 
-        settingButton = (Button) findViewById(R.id.setting_button);
+        settingButton = (ImageButton) findViewById(R.id.title_setting_button);
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +163,7 @@ public class TitleScreen extends AppCompatActivity {
             }
         });
 
-        highscoreButton = (Button) findViewById(R.id.highscore_button);
+        highscoreButton = (ImageButton) findViewById(R.id.title_highscore_button);
         highscoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,18 +173,8 @@ public class TitleScreen extends AppCompatActivity {
         });
 
         languageButton = (ImageButton) findViewById(R.id.language_menu);
+        setBackgroundLanguageButton(languageIndex);
 
-        switch(languageIndex) {
-            case Game.DUTCH:
-                languageButton.setBackgroundResource(R.drawable.dutch_flag);
-                break;
-            case Game.ENGLISH:
-                languageButton.setBackgroundResource(R.drawable.english_flag); //ResourcesCompat.getDrawable(getResources(), R.drawable.name, null);
-                break;
-            default:
-                languageButton.setBackgroundResource(R.drawable.dutch_flag);
-                break;
-        }
         languageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,31 +183,72 @@ public class TitleScreen extends AppCompatActivity {
                 } else {
                     languageIndex++;
                 }
-                switch(languageIndex) { // same code twice, refactor
-                    case Game.DUTCH:
-                        languageButton.setBackgroundResource(R.drawable.dutch_flag);
-                        break;
-                    case Game.ENGLISH:
-                        languageButton.setBackgroundResource(R.drawable.english_flag);
-                        break;
-                    default:
-                        languageButton.setBackgroundResource(R.drawable.dutch_flag);
-                        break;
-                }
+                setBackgroundLanguageButton(languageIndex);
             }
         });
     }
 
-    //not necessary because it is a parent activity
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        for(String s : playerList) {
-            System.out.println(s);
-        }
-        savedInstanceState.putStringArrayList(PLAYERLIST, playerList);
+    public void onPause() {
+        super.onPause();
 
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
+        SharedPreferences settings = getSharedPreferences(GameScreen.GAME_PREFS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.clear();
+        editor.putInt("player_id1", playerId1);
+        editor.putInt("player_id2", playerId2);
+        editor.putString("json_player_list", new Gson().toJson(playerList));
+
+        editor.apply();
+    }
+
+    public void startListIntent(View v, int playerSide) {
+        Intent listIntent = new Intent(v.getContext(), PlayerListView.class);
+        listIntent.putExtra("player number", playerSide);
+        startActivity(listIntent);
+    }
+
+    public static void editPlayer(boolean playerSide, int playerId) {
+        if(playerSide == Game.PLAYER1) {
+            playerId1 = playerId;
+        } else {
+            System.out.println("called edit");
+            playerId2 = playerId;
+        }
+    }
+
+    public void updatePlayerTextFields() {
+        System.out.println(playerId1 + " " + playerId2);
+        playerName1.setText(playerList.get(playerId1).getName());
+        System.out.println(playerList.get(playerId1).getName());
+        playerName2.setText(playerList.get(playerId2).getName());
+        System.out.println(playerList.get(playerId2).getName());
+    }
+
+    public void setBackgroundLanguageButton(int languageIndex) {
+        switch(languageIndex) {
+            case Game.DUTCH:
+                languageButton.setBackgroundResource(R.drawable.dutch_flag);
+                break;
+            case Game.ENGLISH:
+                languageButton.setBackgroundResource(R.drawable.english_flag);
+                break;
+            default:
+                languageButton.setBackgroundResource(R.drawable.dutch_flag);
+                break;
+        }
+    }
+
+    public void addDefaultPlayers() {
+        Player player1 = new Player("Karel", R.drawable.icon1);
+        playerId1 = playerList.size();
+        player1.setId(playerId1);
+        playerList.add(player1);
+
+        Player player2 = new Player("Piet", R.drawable.icon2);
+        playerId2 = playerList.size();
+        player2.setId(playerId2);
+        playerList.add(player2);
     }
 }

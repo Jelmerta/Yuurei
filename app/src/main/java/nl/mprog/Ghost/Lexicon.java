@@ -9,63 +9,74 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.util.TreeSet;
 
-/**
- * Created by Gebruiker on 10/3/2015.
- */
 public class Lexicon {
 
-    Trie lexicon;
+    TreeSet<String> lexicon;
+    TreeSet<String> filteredLexicon;
 
     public Lexicon(InputStream is) {
         BufferedReader br = null;
 
         try {
             br = new BufferedReader(new InputStreamReader(is));
-            lexicon = new Trie();
+            lexicon = new TreeSet<>();
 
             String lexiconWord;
 
             while ((lexiconWord = br.readLine()) != null) {
-                    lexicon.addWord(lexiconWord); // It isn't really necessary to add every single word: zand -> zandkasteel
+                    lexicon.add(lexiconWord);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (br != null)br.close();
+                if (br != null) br.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
     }
 
-    public Lexicon(List words) {
-        lexicon = new Trie();
+    public void updateFilter(String prefix) {
+        filteredLexicon = filter(prefix);
+    }
 
-        for(int i = 0; i < words.size(); i++) {
-            System.out.println(words.get(i));
-            lexicon.addWord(words.get(i).toString()); // It isn't really necessary to add every single word: zand -> zandkasteel
+    public TreeSet<String> filter(String prefix) {
+        TreeSet<String> filteredTree = new TreeSet<>();
+        if(lexicon.contains(prefix)) {
+            filteredTree.add(prefix);
+        }
+        String currentWord = lexicon.higher(prefix);
+
+        if(filteredLexicon != null) {
+            while(currentWord != null && currentWord.startsWith(prefix)) {
+                filteredTree.add(currentWord);
+                currentWord = filteredLexicon.higher(currentWord);
+            }
+        } else {
+            while(currentWord != null && currentWord.startsWith(prefix)) {
+                filteredTree.add(currentWord);
+                currentWord = lexicon.higher(currentWord);
+            }
+        }
+
+        return filteredTree;
+    }
+
+    //only call when the filtered lexicon is updated
+    public int count() {
+        return filteredLexicon.size();
+    }
+
+    public boolean contains(String word) {
+        return filteredLexicon.contains(word);
+    }
+
+    public void reset() {
+        if(filteredLexicon != null) {
+            filteredLexicon.clear();
         }
     }
-
-    public List filter(String prefix) {
-        return lexicon.getWords(prefix);
-    }
-
-    public int count(String prefix) {
-        return lexicon.getWords(prefix).size();
-    }
-
-    public String result(String prefix) {
-        //return filterAndPrint(prefix).get(0);
-        return lexicon.getWords(prefix).toString(); //test this
-    }
-
-    public void clear() {
-        lexicon.clear();
-    }
-
-    // Reset function is not required
 }

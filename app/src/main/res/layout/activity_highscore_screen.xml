@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     android:id="@+id/highscore_activity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,109 +12,173 @@
     tools:context="..HighScoreScreen">
 
     <LinearLayout
-        android:id="@+id/player1_highscore"
-        android:layout_marginTop="30dp"
-        android:layout_width="wrap_content"
+        android:id="@+id/highscore_player1"
         android:layout_height="wrap_content"
-        android:layout_below="@id/setting_button"
-        android:layout_centerHorizontal="true">
+        android:layout_width="wrap_content"
+        android:layout_gravity="center">
 
         <TextView
-            android:id="@+id/ranking_text1"
+            android:id="@+id/highscore_place1"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="227"
+            android:text="ranking_number1"
             android:textSize="30sp"
             />
 
         <ImageButton
-            android:id="@+id/standing_image1"
+            android:id="@+id/highscore_standing_image1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
-            android:id="@+id/player1_icon"
+            android:id="@+id/highscore_player_icon1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/player1_name"
+            android:id="@+id/highscore_player_name1"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Karel"
+            android:text="name1"
             android:textSize="30sp"
             />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/player2_highscore"
-        android:layout_width="wrap_content"
+        android:id="@+id/highscore_player2"
         android:layout_height="wrap_content"
-        android:layout_below="@id/player1_highscore"
-        android:layout_centerHorizontal="true">
+        android:layout_width="wrap_content"
+        android:layout_gravity="center">
 
         <TextView
-            android:id="@+id/ranking2_text"
+            android:id="@+id/highscore_place2"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="227"
+            android:text="ranking_number2"
             android:textSize="30sp"
             />
 
-        <TextView
-            android:id="@+id/player2_name"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Karel"
-            android:textSize="30sp"
-            />
+        <ImageButton
+            android:id="@+id/highscore_standing_image2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/highscore_player_icon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/player2_name"
+            android:id="@+id/highscore_player_name2"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Karel"
-            android:textSize="30sp"
-            />
-
-        <TextView
-            android:id="@+id/player2_name"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Karel"
+            android:text="name2"
             android:textSize="30sp"
             />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/winning_message"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/highscore_player3"
         android:layout_height="wrap_content"
-        android:text="player wint!"
-        android:textSize="50sp"
-        android:layout_below="@id/player2_highscore"
-        android:layout_centerHorizontal="true"
-        />
-
-    <Button
-        android:id="@+id/play_again_button"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:text="Play Again!"
-        android:textSize="30sp"
-        android:layout_below="@id/winning_message"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center">
 
-    <ImageButton
-        android:id="@+id/highscore_button"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        <TextView
+            android:id="@+id/highscore_place3"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="ranking_number3"
+            android:textSize="30sp"
+            />
 
+        <ImageButton
+            android:id="@+id/highscore_standing_image3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/highscore_player_icon3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/highscore_player_name3"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="name3"
+            android:textSize="30sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/highscore_player4"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/highscore_place4"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="ranking_number4"
+            android:textSize="30sp"
+            />
+
+        <ImageButton
+            android:id="@+id/highscore_standing_image4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/highscore_player_icon4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/highscore_player_name4"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="name4"
+            android:textSize="30sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/highscore_player5"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/highscore_place5"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="ranking_number5"
+            android:textSize="30sp"
+            />
+
+        <ImageButton
+            android:id="@+id/highscore_standing_image5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/highscore_player_icon5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/highscore_player_name5"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="name5"
+            android:textSize="30sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

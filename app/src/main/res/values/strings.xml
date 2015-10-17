@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Yuurei</string>
-
     <string name="game_title_text">幽霊</string>
     <string name="action_settings">Settings</string>
+    <string name="explanation_title">Explanation</string>
+    <string name="explanation">This is the ghost game and this is an explanation how this game works.</string>
 </resources>

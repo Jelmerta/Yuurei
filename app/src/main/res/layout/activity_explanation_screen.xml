@@ -15,7 +15,7 @@
         android:id="@+id/explanation_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Explanation"
+        android:text="@string/explanation_title"
         android:textSize="40sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -25,7 +25,7 @@
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="bbjdfgdfgshgkshdjkhfkhgkhgk LOREM IPSUM dfkfjgldlgjdklfj dfjgjslfg jfgjldsjffasjfasldhfhasdfuiasgfyishghisuhruishufghudhfhsugihlgdyugukhsrgiushgushurihesuiguihigujesoghiohgiodhgiohgirhgiohgiohgiohgoehgohegohegejkghdriodrjtigjrithiortollgjldk"
+        android:text="@string/explanation"
         android:textSize="32sp"
         android:layout_below="@id/explanation_title_text"/>
 

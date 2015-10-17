@@ -10,9 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import nl.mprog.Ghost.R;
 
-/**
- * Created by Gebruiker on 10/7/2015.
- */
 public class ExplanationScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,183 +7,251 @@ package nl.mprog.Ghost.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import nl.mprog.Ghost.Game;
 import nl.mprog.Ghost.Lexicon;
+import nl.mprog.Ghost.Player;
 import nl.mprog.Ghost.R;
 
 import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by Gebruiker on 10/3/2015.
- */
-public class GameScreen extends Activity {
+public class GameScreen extends Activity implements View.OnClickListener {
+    public static final String GAME_PREFS = "GamePrefsFile";
 
     Game game;
-    Lexicon lexicon;
 
-    private int lexiconLanguage;
-    private String playerName1;
-    private String playerName2;
+    int languageIndex;
+    int playerId1;
+    int playerId2;
+
+    ImageButton settingButton;
+    ImageButton homeButton;
+    ImageButton restartGameButton;
 
     TextView textPlayerName1;
     TextView textPlayerName2;
 
-    TextView currentPrefixText;
-    EditText inputField;
-    ImageButton enterButton;
-    Button restartGame;
+    TextView prefixText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+
+        SharedPreferences gamePrefs = this.getSharedPreferences("GamePrefsFile", MODE_PRIVATE);
+
         Intent intent = getIntent();
-
-        lexiconLanguage = intent.getIntExtra("LanguageIndex", 0);
-        InputStream lexiconStream;
-        lexiconStream = getResources().openRawResource(R.raw.aaa); //currently this test file is being used, because memory is not capable of loading the dutch/english files, will try to use radix trie or database instead next week if I have enough time
-
-        /*switch(lexiconLanguage) {
-            case Game.DUTCH:
-                lexiconStream = getResources().openRawResource(R.raw.dutch);
-                break;
-            case Game.ENGLISH:
-                lexiconStream = getResources().openRawResource(R.raw.english);
-                break;
-            default:
-                lexiconStream = getResources().openRawResource(R.raw.dutch);
-                break;
-        }*/
-
-        lexicon = new Lexicon(lexiconStream);
-
-        currentPrefixText = (TextView) findViewById(R.id.guessed_prefix_text);
-
-        if (savedInstanceState != null) {
-            System.out.println("you've been here");
-            playerName1 = savedInstanceState.getString("player_name1");
-            playerName2 = savedInstanceState.getString("player_name2");
-            lexiconLanguage = savedInstanceState.getInt("lexicon_language");
-            game = new Game(lexicon); // should choose correct lexicon here
-            game.setPrefix(savedInstanceState.getString("prefix"));
-            game.setTurn(savedInstanceState.getBoolean("turn", false));
-            game.setEnded(savedInstanceState.getBoolean("ended", false));
-
-            currentPrefixText.setText(game.getPrefix());
-            // set prefix textview
-
-            // Restore value of members from saved state
-            // get game state
-        } else {
-            game = new Game(lexicon);
-            playerName1 = intent.getStringExtra("player_name1");
-            playerName2 = intent.getStringExtra("player_name2");
+        languageIndex = intent.getIntExtra("language_index", -1);
+        playerId1 = intent.getIntExtra("player_id1", -1);
+        playerId2 = intent.getIntExtra("player_id2", -1);
+        if(playerId1 == -1) {
+            languageIndex = gamePrefs.getInt("language_index", -1);
+            playerId1 = gamePrefs.getInt("player_id1", -1);
+            playerId2 = gamePrefs.getInt("player_id2", -1);
         }
+
+        String playerListString = gamePrefs.getString("json_player_list", null);
+
+        Type type = new TypeToken<List<Player>>() {
+        }.getType();
+        ArrayList<Player> playerList = new Gson().fromJson(playerListString, type);
+
+        InputStream lexiconStream = getStream(languageIndex);
+        Lexicon lexicon = new Lexicon(lexiconStream);
+
+        game = new Game(lexicon, playerId1, playerId2);
+        game.setPlayerList(playerList);
+
+        prefixText = (TextView) findViewById(R.id.guessed_prefix_text);
 
         textPlayerName1 = (TextView) findViewById(R.id.game_player1_name);
         textPlayerName2 = (TextView) findViewById(R.id.game_player2_name);
 
-        textPlayerName1.setText(playerName1);
-        textPlayerName2.setText(playerName2);
+        textPlayerName1.setText(game.getPlayerName(Game.PLAYER1));
+        textPlayerName2.setText(game.getPlayerName(Game.PLAYER2));
 
-        if(game.turn()) {
-            textPlayerName1.setTextColor(Color.BLACK);
-            textPlayerName2.setTextColor(Color.RED);
-        } else {
-            textPlayerName1.setTextColor(Color.RED);
-            textPlayerName2.setTextColor(Color.BLACK);
+        updatePrefixText();
+        updatePlayerColors();
+
+        ArrayList<Button> buttonList = new ArrayList<>();
+
+        buttonList.add((Button) findViewById(R.id.keyboard_a));
+        buttonList.add((Button) findViewById(R.id.keyboard_b));
+        buttonList.add((Button) findViewById(R.id.keyboard_c));
+        buttonList.add((Button) findViewById(R.id.keyboard_d));
+        buttonList.add((Button) findViewById(R.id.keyboard_e));
+        buttonList.add((Button) findViewById(R.id.keyboard_f));
+        buttonList.add((Button) findViewById(R.id.keyboard_g));
+        buttonList.add((Button) findViewById(R.id.keyboard_h));
+        buttonList.add((Button) findViewById(R.id.keyboard_i));
+        buttonList.add((Button) findViewById(R.id.keyboard_j));
+        buttonList.add((Button) findViewById(R.id.keyboard_k));
+        buttonList.add((Button) findViewById(R.id.keyboard_l));
+        buttonList.add((Button) findViewById(R.id.keyboard_m));
+        buttonList.add((Button) findViewById(R.id.keyboard_n));
+        buttonList.add((Button) findViewById(R.id.keyboard_o));
+        buttonList.add((Button) findViewById(R.id.keyboard_p));
+        buttonList.add((Button) findViewById(R.id.keyboard_q));
+        buttonList.add((Button) findViewById(R.id.keyboard_r));
+        buttonList.add((Button) findViewById(R.id.keyboard_s));
+        buttonList.add((Button) findViewById(R.id.keyboard_t));
+        buttonList.add((Button) findViewById(R.id.keyboard_u));
+        buttonList.add((Button) findViewById(R.id.keyboard_v));
+        buttonList.add((Button) findViewById(R.id.keyboard_w));
+        buttonList.add((Button) findViewById(R.id.keyboard_x));
+        buttonList.add((Button) findViewById(R.id.keyboard_y));
+        buttonList.add((Button) findViewById(R.id.keyboard_z));
+
+        for(Button button : buttonList) {
+            button.setOnClickListener(this);
         }
 
-        enterButton = (ImageButton) findViewById(R.id.game_enter_button);
-        inputField = (EditText) findViewById(R.id.guessed_letter_input);
-
-        enterButton.setOnClickListener(new View.OnClickListener() {
+        settingButton = (ImageButton) findViewById(R.id.game_setting_button);
+        settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String input = inputField.getText().toString();
-                if(!input.isEmpty() && input.length() == 1) { // don't make it able in the first place to enter more than 1 character
-                    game.guess(input.charAt(0));
-                    currentPrefixText.setText(game.getPrefix());
-                    inputField.setText("");
-                    if(game.ended()) {
-                        Intent winIntent = new Intent(v.getContext(), WinScreen.class);
-                        winIntent.putExtra("losing_word", game.getPrefix()); //also loses when no word is possible anymore, so string might not be complete word
-                        if(game.winner()) {
-                            winIntent.putExtra("winning_player", playerName2);
-                        } else {
-                            winIntent.putExtra("winning_player", playerName1);
-                        }
-                        startActivity(winIntent);
-                    } else if(game.turn()) {
-                        textPlayerName1.setTextColor(Color.BLACK);
-                        textPlayerName2.setTextColor(Color.RED);
-                    } else {
-                        textPlayerName1.setTextColor(Color.RED);
-                        textPlayerName2.setTextColor(Color.BLACK);
-                    }
-                }
+                Intent settingIntent = new Intent(v.getContext(), SettingScreen.class);
+                startActivity(settingIntent);
             }
         });
 
-        restartGame = (Button) findViewById(R.id.restart_button);
-
-        restartGame.setOnClickListener(new View.OnClickListener() {
+        homeButton = (ImageButton) findViewById(R.id.game_home_button);
+        homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                game.restart();
-                currentPrefixText.setText(game.getPrefix());
-                textPlayerName1.setTextColor(Color.RED);
-                textPlayerName2.setTextColor(Color.BLACK);
+                finish();
+            }
+        });
+
+        restartGameButton = (ImageButton) findViewById(R.id.game_restart_button);
+        restartGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restartGame();
             }
         });
     }
 
-   @Override
+    @Override
+    public void onClick(View v) {
+            switch(v.getId()) {
+                case R.id.keyboard_a:
+                    game.guess('a');
+                    break;
+                case R.id.keyboard_b:
+                    game.guess('b');
+                    break;
+                case R.id.keyboard_c:
+                    game.guess('c');
+                    break;
+                case R.id.keyboard_d:
+                    game.guess('d');
+                    break;
+                case R.id.keyboard_e:
+                    game.guess('e');
+                    break;
+                case R.id.keyboard_f:
+                    game.guess('f');
+                    break;
+                case R.id.keyboard_g:
+                    game.guess('g');
+                    break;
+                case R.id.keyboard_h:
+                    game.guess('h');
+                    break;
+                case R.id.keyboard_i:
+                    game.guess('i');
+                    break;
+                case R.id.keyboard_j:
+                    game.guess('j');
+                    break;
+                case R.id.keyboard_k:
+                    game.guess('k');
+                    break;
+                case R.id.keyboard_l:
+                    game.guess('l');
+                    break;
+                case R.id.keyboard_m:
+                    game.guess('m');
+                    break;
+                case R.id.keyboard_n:
+                    game.guess('n');
+                    break;
+                case R.id.keyboard_o:
+                    game.guess('o');
+                    break;
+                case R.id.keyboard_p:
+                    game.guess('p');
+                    break;
+                case R.id.keyboard_q:
+                    game.guess('q');
+                    break;
+                case R.id.keyboard_r:
+                    game.guess('r');
+                    break;
+                case R.id.keyboard_s:
+                    game.guess('s');
+                    break;
+                case R.id.keyboard_t:
+                    game.guess('t');
+                    break;
+                case R.id.keyboard_u:
+                    game.guess('u');
+                    break;
+                case R.id.keyboard_v:
+                    game.guess('v');
+                    break;
+                case R.id.keyboard_w:
+                    game.guess('w');
+                    break;
+                case R.id.keyboard_x:
+                    game.guess('x');
+                    break;
+                case R.id.keyboard_y:
+                    game.guess('y');
+                    break;
+                case R.id.keyboard_z:
+                    game.guess('z');
+                    break;
+                default:
+                    break;
+            }
+
+            if(game.ended()) {
+                goToWinActivity();
+            } else {
+                updatePlayerColors();
+                updatePrefixText();
+            }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_game_screen, menu);
         return true;
     }
 
-    /* currently shows menu active over the keyboard
-
-    @Override
-    public boolean onPrepareOptionsMenu() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
-            case R.id.action_change_language:
-                // obviously need to do more: change item in menu / change to actual dutch/english
-                InputStream lexiconStream = getResources().openRawResource(R.raw.aaa);
-                lexicon = new Lexicon(lexiconStream);
-                game.setLexicon(lexicon);
-                return true;
             case R.id.action_restart_game:
-                game.restart(); // put all this in one function - called twice
-                currentPrefixText.setText(game.getPrefix());
-                textPlayerName1.setTextColor(Color.RED);
-                textPlayerName2.setTextColor(Color.BLACK);
+                restartGame();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -191,17 +259,62 @@ public class GameScreen extends Activity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        System.out.println("saved");
-        savedInstanceState.putBoolean("turn", game.turn());
-        savedInstanceState.putBoolean("ended", game.ended());
-        savedInstanceState.putInt("lexicon_language", lexiconLanguage);
-        savedInstanceState.putString("player_name1", playerName1);
-        savedInstanceState.putString("player_name2", playerName2);
-        savedInstanceState.putString("prefix", game.getPrefix());
+    public void onPause() {
+        super.onPause();
 
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
+        SharedPreferences settings = getSharedPreferences(GAME_PREFS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.clear();
+        editor.putInt("language_index", languageIndex);
+        editor.putString("json_player_list", new Gson().toJson(game.getPlayerList()));
+        editor.putInt("player_id1", playerId1);
+        editor.putInt("player_id2", playerId2);
+
+        editor.apply();
+    }
+
+    public void updatePlayerColors() {
+        if(game.turn() == Game.PLAYER1) {
+            textPlayerName1.setTextColor(Color.RED);
+            textPlayerName2.setTextColor(Color.BLACK);
+        } else {
+            textPlayerName1.setTextColor(Color.BLACK);
+            textPlayerName2.setTextColor(Color.RED);
+        }
+    }
+
+    public InputStream getStream(int languageIndex) {
+        switch(languageIndex) {
+            case Game.DUTCH:
+                return getResources().openRawResource(R.raw.dutch);
+            case Game.ENGLISH:
+                return getResources().openRawResource(R.raw.english);
+            default:
+                return getResources().openRawResource(R.raw.dutch);
+        }
+    }
+
+    public void updatePrefixText() {
+        prefixText.setText(game.getPrefix());
+    }
+
+    public void goToWinActivity() {
+        Intent winIntent = new Intent(this, WinScreen.class);
+        if(game.winner() == Game.PLAYER1) {
+            game.increaseScore(playerId1);
+            winIntent.putExtra("winning_player_id", playerId1);
+        } else {
+            game.increaseScore(playerId2);
+            winIntent.putExtra("winning_player_id", playerId2);
+        }
+        winIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(winIntent);
+    }
+
+    public void restartGame() {
+        game.restart();
+        updatePrefixText();
+        updatePlayerColors();
     }
 }
