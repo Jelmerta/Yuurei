@@ -25,6 +25,11 @@ import nl.mprog.Ghost.Game;
 import nl.mprog.Ghost.Player;
 import nl.mprog.Ghost.R;
 
+/* This view is used when the player wants to change their name in the title screen.
+ * The list of players is used to get the player names and show them in the list.
+ * Upon selection, the player in the TitleScreen class is changed accordingly. (Right now this is done with
+ * a static method, this could be changed to a sharedpreference which is loaded into the TitleScreen.)
+ */
 public class PlayerListView extends AppCompatActivity {
 
     ListView playerNames;

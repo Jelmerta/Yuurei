@@ -11,6 +11,10 @@ import android.view.MenuItem;
 
 import nl.mprog.Ghost.R;
 
+/* The highscores are not yet implemented, but this should be relatively simple.
+ * Go through the list of players and sort them by score, get the name and the score of the players in order
+ * and show them on screen.
+ */
 public class HighscoreScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.TreeSet;
 
+/* This is the class that handles the lexicon that's being used in the game
+ * It reads a file with strings (words) separated by enters and puts them in a TreeSet in which the data is sorted by alphabet.
+ */
 public class Lexicon {
 
     TreeSet<String> lexicon;
@@ -43,6 +46,7 @@ public class Lexicon {
         filteredLexicon = filter(prefix);
     }
 
+    // Filters the current tree adding words that are still correct in the old tree with the new character added
     public TreeSet<String> filter(String prefix) {
         TreeSet<String> filteredTree = new TreeSet<>();
         if(lexicon.contains(prefix)) {
@@ -65,7 +69,7 @@ public class Lexicon {
         return filteredTree;
     }
 
-    //only call when the filtered lexicon is updated
+    //Returns the size of the filtered lexicon, should only be called when the filtered lexicon is updated.
     public int count() {
         return filteredLexicon.size();
     }

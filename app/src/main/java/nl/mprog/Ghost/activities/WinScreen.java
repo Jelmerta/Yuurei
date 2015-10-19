@@ -24,6 +24,9 @@ import java.util.List;
 import nl.mprog.Ghost.Player;
 import nl.mprog.Ghost.R;
 
+/*
+ * This is the class that creates the winning screen activity. It shows who won and it can start a new game with the same players/language
+ */
 public class WinScreen extends AppCompatActivity{
 
     TextView winningMessage;

@@ -30,6 +30,10 @@ import nl.mprog.Ghost.Game;
 import nl.mprog.Ghost.Player;
 import nl.mprog.Ghost.R;
 
+/* This is the title screen which the application starts with. It keeps track of player data that
+ * exists and that is created while the application is active.
+ */
+
 public class TitleScreen extends AppCompatActivity {
     List<Player> playerList;
 
@@ -52,6 +56,9 @@ public class TitleScreen extends AppCompatActivity {
     EditText newPlayerName;
     Button addPlayerButton;
 
+    /* Creates the views and onclicklisteners. This activity has several features. The most important one is adding new players and changing the language.
+     * It will test if a player already exists before creating them and it will show a toast if the player data is succesfully added
+     */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,6 +195,7 @@ public class TitleScreen extends AppCompatActivity {
         });
     }
 
+    // Saves the player data
     @Override
     public void onPause() {
         super.onPause();
@@ -203,29 +211,29 @@ public class TitleScreen extends AppCompatActivity {
         editor.apply();
     }
 
+    // Starts the activity for changing the players
     public void startListIntent(View v, int playerSide) {
         Intent listIntent = new Intent(v.getContext(), PlayerListView.class);
         listIntent.putExtra("player number", playerSide);
         startActivity(listIntent);
     }
 
+    // Changes the active player
     public static void editPlayer(boolean playerSide, int playerId) {
         if(playerSide == Game.PLAYER1) {
             playerId1 = playerId;
         } else {
-            System.out.println("called edit");
             playerId2 = playerId;
         }
     }
 
+    // Edits the text field to the current player
     public void updatePlayerTextFields() {
-        System.out.println(playerId1 + " " + playerId2);
         playerName1.setText(playerList.get(playerId1).getName());
-        System.out.println(playerList.get(playerId1).getName());
         playerName2.setText(playerList.get(playerId2).getName());
-        System.out.println(playerList.get(playerId2).getName());
     }
 
+    // Changes the icon of the language button
     public void setBackgroundLanguageButton(int languageIndex) {
         switch(languageIndex) {
             case Game.DUTCH:
@@ -240,6 +248,7 @@ public class TitleScreen extends AppCompatActivity {
         }
     }
 
+    // When first starting the game, there are no players yet, so these default players are created for testing purposes
     public void addDefaultPlayers() {
         Player player1 = new Player("Karel", R.drawable.icon1);
         playerId1 = playerList.size();

@@ -30,6 +30,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/* This class handles the game activity and game object. A custom keyboard is provided for the user to enter a single letter
+ * which is handled by the game object. A number of features, such as a restart button and menu navigation are provided.
+ * The language and players are remembered so when a new game plays it can easily be loaded again with the same settings.
+ * (although the complete game state is not remembered)
+ */
+
 public class GameScreen extends Activity implements View.OnClickListener {
     public static final String GAME_PREFS = "GamePrefsFile";
 
@@ -48,6 +54,8 @@ public class GameScreen extends Activity implements View.OnClickListener {
 
     TextView prefixText;
 
+    // Creates all the views and their onclicklisteners, as well as making it able to pass
+    // data to the game class to play the game
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,6 +266,7 @@ public class GameScreen extends Activity implements View.OnClickListener {
         }
     }
 
+    // Saves the initial state of the game so that a new game on the "WinScreen" can easily be made
     @Override
     public void onPause() {
         super.onPause();
@@ -274,6 +283,7 @@ public class GameScreen extends Activity implements View.OnClickListener {
         editor.apply();
     }
 
+    // Updates the on-screen colors of the players
     public void updatePlayerColors() {
         if(game.turn() == Game.PLAYER1) {
             textPlayerName1.setTextColor(Color.RED);
@@ -284,6 +294,7 @@ public class GameScreen extends Activity implements View.OnClickListener {
         }
     }
 
+    // Returns the inputstream with the correct lexicon file given the language　
     public InputStream getStream(int languageIndex) {
         switch(languageIndex) {
             case Game.DUTCH:
@@ -299,6 +310,7 @@ public class GameScreen extends Activity implements View.OnClickListener {
         prefixText.setText(game.getPrefix());
     }
 
+    // Called when the game is finished, passes the winning player
     public void goToWinActivity() {
         Intent winIntent = new Intent(this, WinScreen.class);
         if(game.winner() == Game.PLAYER1) {
@@ -312,6 +324,7 @@ public class GameScreen extends Activity implements View.OnClickListener {
         startActivity(winIntent);
     }
 
+    // Called when the restart button is pressed, starts the game with the same lexicon and players but with empty text
     public void restartGame() {
         game.restart();
         updatePrefixText();

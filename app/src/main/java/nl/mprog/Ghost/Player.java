@@ -5,6 +5,7 @@
 
 package nl.mprog.Ghost;
 
+/* This class contains the player data. An id is used to search for players in the playerlist */
 public class Player {
     private int id;
     private String name;

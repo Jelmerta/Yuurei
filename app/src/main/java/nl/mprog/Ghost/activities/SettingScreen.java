@@ -11,6 +11,9 @@ import android.view.MenuItem;
 
 import nl.mprog.Ghost.R;
 
+/* This is the class used to change the settings.
+ * Right now, there are no settings.
+ */
 public class SettingScreen extends AppCompatActivity {
 
     @Override
